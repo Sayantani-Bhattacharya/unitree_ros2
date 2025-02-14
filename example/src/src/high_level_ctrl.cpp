@@ -43,34 +43,55 @@ private:
 
             std::vector<PathPoint> path;
 
-            for (int i = 0; i < 30; i++)
-            {
-                PathPoint path_point_tmp;
-                time_temp += time_seg;
-                // Tacking a sin path in x direction
-                // The path is respect to the initial coordinate system
-                float px_local = 0.5;
-                float py_local = 0.0;              
-                float yaw_local = 0.;
-                // Reduced speed.
-                float vx_local = 0.1 * cos(0.5 * time_temp);
-                float vy_local = 0;
-                float vyaw_local = 0.;
+            // // Give a forward path motion
+            // float vx = 0.1;
+            // float vy = 0.0;
+            // float vyaw = 0.0;
+            // // Give a forward path.
+            // sport_req.Move(req, vx, vy, vyaw);
 
-                // Convert trajectory commands to the initial coordinate system
-                path_point_tmp.timeFromStart = i * time_seg;
-                path_point_tmp.x = px_local * cos(yaw0) - py_local * sin(yaw0) + px0;
-                path_point_tmp.y = px_local * sin(yaw0) + py_local * cos(yaw0) + py0;
-                path_point_tmp.yaw = yaw_local + yaw0;
-                path_point_tmp.vx = vx_local * cos(yaw0) - vy_local * sin(yaw0);
-                path_point_tmp.vy = vx_local * sin(yaw0) + vy_local * cos(yaw0);
-                path_point_tmp.vyaw = vyaw_local;
-                path.push_back(path_point_tmp);
-            }
-            // Get request messages corresponding to high-level motion commands
-            sport_req.TrajectoryFollow(req, path);
+            // // Give a backward motion : diagonally baackgrack
+            // float vx = - 0.1;
+            // float vy = 0.0;
+            // float vyaw = 0.0;
+            // // Give a forward path.
+            // sport_req.Move(req, vx, vy, vyaw);
 
-            // try outu otehr methods in sport_req: move, speed, up, down, stretch...etc
+            // Give a left motion
+            float vx = 0.0;
+            float vy = +0.1;
+            float vyaw = 0.0;
+            // Give a forward path.
+            sport_req.Move(req, vx, vy, vyaw);
+
+            // // Give a right motion
+            // float vx = 0.0;
+            // float vy = -0.1;
+            // float vyaw = 0.0;
+            // // Give a forward path.
+            // sport_req.Move(req, vx, vy, vyaw);
+
+
+            // Try damping req first. : works
+            // sport_req.Damp(req);
+
+
+            // Not tested.
+            // Turn left.
+            float vx = 0.0;
+            float vy = 0.0;
+            float vyaw = 0.1;
+            // Give a forward path.
+            sport_req.Move(req, vx, vy, vyaw);
+
+            // Turn right.
+            float vx = 0.0;
+            float vy = 0.0;
+            float vyaw = -0.1;
+            // Give a forward path.
+            sport_req.Move(req, vx, vy, vyaw);
+
+
             // Publish request messages
             req_puber->publish(req);
         }
@@ -122,68 +143,3 @@ int main(int argc, char *argv[])
     rclcpp::shutdown();
     return 0;
 }
-
-
-
-
-// Case1:
-// moves forward for some time and then does like a circle thing... -> low speed.
-// float px_local = 0.5;
-//                 float py_local = 0;
-//                 float yaw_local = 0.;
-//                 // Reduced speed.
-//                 float vx_local = 0.1 * cos(0.5 * time_temp);
-//                 float vy_local = 0;
-//                 float vyaw_local = 0.;
-
-
-
-// Case2:
-// just does the circly thing
-// // Tacking a sin path in x direction
-//                 // The path is respect to the initial coordinate system
-//                 float px_local = 0;
-//                 float py_local = 0.5;
-//                 float yaw_local = 0.;
-//                 // Reduced speed.
-//                 float vx_local = 0.1 * cos(0.5 * time_temp);
-//                 float vy_local = 0.1 * cos(0.5 * time_temp);
-//                 float vyaw_local = 0.;
-
-
-
-// still just circle:
-// / The path is respect to the initial coordinate system
-//                 float px_local = 0.0;
-//                 float py_local = 0.5;
-//                 float yaw_local = 0.;
-//                 // Reduced speed.
-//                 float vx_local = 0;
-//                 float vy_local = 0.1 * cos(0.5 * time_temp);
-//                 float vyaw_local = 0.;
-
-
-
-// still circle
-// / The path is respect to the initial coordinate system
-//                 float px_local = 0.0;
-//                 float py_local = 0.5;
-//                 float yaw_local = 0.;
-//                 // Reduced speed.
-//                 float vx_local = 0;
-//                 float vy_local = 0.051;
-//                 float vyaw_local = 0.;
-
-
-
-// Nothing happens
-// at x -0.05 also
-// // Tacking a sin path in x direction
-//                 // The path is respect to the initial coordinate system
-//                 float px_local = 0.05;
-//                 float py_local = 0.0;              
-//                 float yaw_local = 0.;
-//                 // Reduced speed.
-//                 float vx_local = 0.1 * cos(0.5 * time_temp);
-//                 float vy_local = 0;
-//                 float vyaw_local = 0.;
