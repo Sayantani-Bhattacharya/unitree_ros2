@@ -18,12 +18,9 @@ class high_level_ctrl : public rclcpp::Node
 public:
     high_level_ctrl() : Node("high_level_ctrl")
     {
-        // unitree_api::msg:: read this
-
         // the state_suber is set to subscribe "high_level_ctrl" topic
         state_suber = this->create_subscription<unitree_go::msg::SportModeState>(
             "sportmodestate", 10, std::bind(&high_level_ctrl::state_callback, this, _1));
-
 
         // the req_puber is set to subscribe "/api/sport/request" topic with dt
         req_puber = this->create_publisher<unitree_api::msg::Request>("/api/sport/request", 10);
@@ -57,12 +54,12 @@ private:
             // // Give a forward path.
             // sport_req.Move(req, vx, vy, vyaw);
 
-            // Give a left motion
-            float vx = 0.0;
-            float vy = +0.1;
-            float vyaw = 0.0;
-            // Give a forward path.
-            sport_req.Move(req, vx, vy, vyaw);
+            // // Give a left motion
+            // float vx = 0.0;
+            // float vy = +0.1;
+            // float vyaw = 0.0;
+            // // Give a forward path.
+            // sport_req.Move(req, vx, vy, vyaw);
 
             // // Give a right motion
             // float vx = 0.0;
@@ -77,12 +74,12 @@ private:
 
 
             // Not tested.
-            // Turn left.
-            float vx = 0.0;
-            float vy = 0.0;
-            float vyaw = 0.1;
-            // Give a forward path.
-            sport_req.Move(req, vx, vy, vyaw);
+            // // Turn left.
+            // float vx = 0.0;
+            // float vy = 0.0;
+            // float vyaw = 0.1;
+            // // Give a forward path.
+            // sport_req.Move(req, vx, vy, vyaw);
 
             // Turn right.
             float vx = 0.0;
