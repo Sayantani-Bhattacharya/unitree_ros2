@@ -36,6 +36,7 @@ find_package(unitree_hg REQUIRED)
 find_package(unitree_api REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(rosbag2_cpp REQUIRED)
 
 add_executable(low_level_ctrl src/low_level_ctrl.cpp src/common/motor_crc.cpp)
@@ -58,7 +59,7 @@ ament_target_dependencies(read_motion_state ${DEPENDENCY_LIST})
 ament_target_dependencies(read_wireless_controller ${DEPENDENCY_LIST})
 #ament_target_dependencies(record_bag ${DEPENDENCY_LIST})
 ament_target_dependencies(sport_mode_ctrl ${DEPENDENCY_LIST})
-ament_target_dependencies(high_level_ctrl ${DEPENDENCY_LIST})
+ament_target_dependencies(high_level_ctrl ${DEPENDENCY_LIST} geometry_msgs)
 
 
 install(TARGETS 

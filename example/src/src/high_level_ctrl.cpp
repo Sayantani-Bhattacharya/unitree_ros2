@@ -6,9 +6,12 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "unitree_go/msg/sport_mode_state.hpp"
-
+#include "geometry_msgs/msg/quaternion.hpp"
+#include "geometry_msgs/msg/twist.hpp"
 #include "unitree_api/msg/request.hpp"
 #include "common/ros2_sport_client.h"
+
+#include "rclcpp/qos.hpp"
 
 using std::placeholders::_1;
 
@@ -27,7 +30,21 @@ public:
         timer_ = this->create_wall_timer(std::chrono::milliseconds(int(dt * 1000)), std::bind(&high_level_ctrl::timer_callback, this));
 
         t = -1; // Runing time count
+
+
+        // Set up QoS profile: TEST : not sure if this is needed.
+        rclcpp::QoS qos_profile(rclcpp::QoSInitialization::from_rmw(rmw_qos_profile_default));
+        qos_profile.keep_last(50);  // Increase history depth
+        qos_profile.reliability(RMW_QOS_POLICY_RELIABILITY_RELIABLE);
+        qos_profile.history(RMW_QOS_POLICY_HISTORY_KEEP_LAST);
+        qos_profile.durability(RMW_QOS_POLICY_DURABILITY_VOLATILE);  // Or TRANSIENT_LOCAL if needed
+
+        // Add a navigation subscriber, that publishes the sport request after processing stuff.
+        nav_msg_sub = create_subscription<geometry_msgs::msg::Twist>("nav_twist", qos_profile, std::bind(&high_level_ctrl::nav_msg_callback, this, _1));
+
     };
+
+
 
 private:
     void timer_callback()
@@ -35,8 +52,8 @@ private:
         t += dt;
         if (t > 0)
         {
-            double time_seg = 0.2;
-            double time_temp = t - time_seg;
+            // double time_seg = 0.2;
+            // double time_temp = t - time_seg;
 
             std::vector<PathPoint> path;
 
@@ -81,18 +98,29 @@ private:
             // // Give a forward path.
             // sport_req.Move(req, vx, vy, vyaw);
 
-            // Turn right.
-            float vx = 0.0;
-            float vy = 0.0;
-            float vyaw = -0.1;
+            // // Turn right.
+            // float vx = 0.0;
+            // float vy = 0.0;
+            // float vyaw = -0.1;
+            // // Give a forward path.
+            // sport_req.Move(req, vx, vy, vyaw);
+
+            // Nav to pose
+            float vx = cmd_vel.linear.x;
+            float vy = cmd_vel.linear.y;
+            float vyaw = cmd_vel.angular.z;
             // Give a forward path.
             sport_req.Move(req, vx, vy, vyaw);
+
+
 
 
             // Publish request messages
             req_puber->publish(req);
         }
     };
+
+    
 
     void state_callback(unitree_go::msg::SportModeState::SharedPtr data)
     {
@@ -113,6 +141,9 @@ private:
 
     // Member variables.
     rclcpp::Subscription<unitree_go::msg::SportModeState>::SharedPtr state_suber;
+    rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr nav_msg_sub;
+
+    geometry_msgs::msg::Twist cmd_vel;
 
     rclcpp::TimerBase::SharedPtr timer_; // ROS2 timer
     rclcpp::Publisher<unitree_api::msg::Request>::SharedPtr req_puber;
@@ -126,6 +157,12 @@ private:
     double px0 = 0;  // initial x position
     double py0 = 0;  // initial y position
     double yaw0 = 0; // initial yaw angle
+
+
+    void nav_msg_callback(const geometry_msgs::msg::Twist msg)
+    {
+        cmd_vel = msg;
+    }
 
 };
 
