@@ -1,6 +1,6 @@
-## Unitree-ROS2 SDK for high and low level control for GO2.
+# Unitree-ROS2 SDK for high and low level control for GO2.
 Author: Sayantani Bhattacharya
-</br>
+</br></br>
 This repository is a modified version of the [Unitree's open sourced SDK](https://github.com/unitreerobotics/unitree_ros2), to enable unitree API integration with navigation based goals.
 
 
@@ -350,6 +350,7 @@ Add Pointcloud topic: utlidar/cloud in rviz2 and modify Fixed frame to utlidar_l
 
 # Demo launch high level control:
 For running the high_level_control node you would need the package [unitree_go2_nav_interfaces](https://github.com/Sayantani-Bhattacharya/unitree_go2_nav).
+</br></br>
 Terminal1:
 
         ./install/unitree_ros2_example/bin/high_level_ctrl
