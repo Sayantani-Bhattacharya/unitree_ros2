@@ -1,6 +1,8 @@
-Unitree robot ROS2 support
+## Unitree-ROS2 SDK for high and low level control for GO2.
+Author: Sayantani Bhattacharya
+</br>
+This repository is a modified version of the [Unitree's open sourced SDK](https://github.com/unitreerobotics/unitree_ros2), to enable unitree API integration with navigation based goals.
 
-[TOC]
 
 # Introduction
 Unitree SDK2 implements an easy-to-use robot communication mechanism based on Cyclonedds, which enable developers to achieve robot communication and control (**Supports Unitree Go2, B2, and H1**). See: https://github.com/unitreerobotics/unitree_sdk2
@@ -347,3 +349,14 @@ Add Pointcloud topic: utlidar/cloud in rviz2 and modify Fixed frame to utlidar_l
 ![image](https://z1.ax1x.com/2023/10/20/piFtyOe.png)
 
 
+# Demo launch high level control:
+
+Terminal1:
+
+        ./install/unitree_ros2_example/bin/high_level_ctrl
+Terminal2: 
+
+    ros2 topic pub /cmd_vel_smoothed geometry_msgs/msg/Twist "{linear: {x: 0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.2}}"
+
+This would move the robot with the twist value provided.
+For demo usage pls refer to: https://github.com/Sayantani-Bhattacharya/unitree_go2_nav
