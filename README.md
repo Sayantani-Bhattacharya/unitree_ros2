@@ -38,7 +38,6 @@ where:
 sudo apt install ros-foxy-rmw-cyclonedds-cpp
 sudo apt install ros-foxy-rosidl-generator-dds-idl
 ```
-
 ### 2. Compile cyclone dds
 The cyclonedds version of Unitree robot is 0.10.2. To communicate with Unitree robots using ROS2, it is necessary to change the dds implementation. See：https://docs.ros.org/en/foxy/Concepts/About-Different-Middleware-Vendors.html
 
@@ -350,7 +349,7 @@ Add Pointcloud topic: utlidar/cloud in rviz2 and modify Fixed frame to utlidar_l
 
 
 # Demo launch high level control:
-
+For running the high_level_control node you would need the package [unitree_go2_nav_interfaces](https://github.com/Sayantani-Bhattacharya/unitree_go2_nav).
 Terminal1:
 
         ./install/unitree_ros2_example/bin/high_level_ctrl
@@ -359,4 +358,6 @@ Terminal2:
     ros2 topic pub /cmd_vel_smoothed geometry_msgs/msg/Twist "{linear: {x: 0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.2}}"
 
 This would move the robot with the twist value provided.
+
+</br>
 For demo usage pls refer to: https://github.com/Sayantani-Bhattacharya/unitree_go2_nav
